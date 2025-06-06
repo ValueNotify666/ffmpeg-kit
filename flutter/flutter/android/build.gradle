@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:8.7.0")
+        classpath("com.android.tools.build:gradle:8.3.0")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
     }
 }
@@ -18,12 +18,34 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
+
+        // 添加本地仓库引用
+        maven {
+            url uri("file://${rootProject.projectDir}/aar/repo")
+        }
     }
 }
 
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
-
+apply plugin: 'maven-publish'
+publishing {
+    publications {
+        aar(MavenPublication) {
+            groupId = 'com.arthenica'
+            artifactId = 'ffmpeg-kit-full-gpl'
+            version = '6.0-2.LTS'
+            // 指定本地 .aar 文件的路径
+            artifact("libs/ffmpeg-kit-full-gpl-6.0-2.LTS.aar")
+        }
+    }
+    repositories {
+        maven {
+            url = uri("file://${rootProject.projectDir}/aar/repo")
+        }
+    }
+}
 android {
     namespace = "com.arthenica.ffmpegkit.flutter"
 
@@ -58,4 +80,7 @@ android {
         implementation("androidx.annotation:annotation:1.9.1")
         implementation("com.arthenica:ffmpeg-kit-full-gpl:6.0-2.LTS")
     }
+}
+tasks.named("build").configure {
+    finalizedBy("publish")
 }

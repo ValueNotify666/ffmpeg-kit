@@ -1,0 +1,19 @@
+// verify_repo_paths.gradle
+task checkRepoPaths {
+    doLast {
+        println "✅ 项目根目录: ${project.rootProject.projectDir}"
+
+        def repoPath = new File(project.rootProject.projectDir, "repo")
+        println "✅ Repo目录是否存在: ${repoPath.exists() ? '是' : '否'} (路径: ${repoPath.absolutePath})"
+
+        // 检查repo目录内容
+        if (repoPath.exists()) {
+            println "📦 Repo内容:"
+            repoPath.eachDirRecurse { dir ->
+                println "   $dir"
+            }
+        } else {
+            println "❌ 错误: repo目录不存在，请先发布仓库"
+        }
+    }
+}

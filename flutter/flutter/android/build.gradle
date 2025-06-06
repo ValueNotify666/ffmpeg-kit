@@ -1,6 +1,6 @@
 group = "com.arthenica.ffmpegkit.flutter"
 version = "1.0-SNAPSHOT"
-
+apply from: './verify_repo_paths.gradle'
 buildscript {
     ext.kotlin_version = "2.1.10"
     repositories {
@@ -22,7 +22,7 @@ allprojects {
 
         // 添加本地仓库引用
         maven {
-            url uri("file://${rootProject.projectDir}/aar/repo")
+            url = uri("${project.rootProject.projectDir}/repo")
         }
     }
 }
